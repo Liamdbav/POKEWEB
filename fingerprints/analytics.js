@@ -62,6 +62,38 @@
     },
   ];
 
+    {
+      name: "Segment",
+      category: "analytics",
+      icon: "segment",
+      detect: {
+        // "analytics" global peut venir d'autres libs — scriptSrc reste le signal fort
+        scriptSrc: [/cdn\.segment\.com/i, /segment\.io/i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Sentry",
+      category: "analytics",
+      icon: "sentry",
+      detect: {
+        globals: ["Sentry"],
+        scriptSrc: [/sentry\.io/i, /browser\.sentry-cdn/i, /sentry\.min\.js/i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Firebase",
+      category: "analytics",
+      icon: "firebase",
+      detect: {
+        globals: ["firebase"],
+        scriptSrc: [/firebaseio\.com/i, /firebase\.googleapis\.com/i, /firebase-app/i],
+      },
+      versionDetect: null,
+    },
+  ];
+
   window.PokewebFingerprints = window.PokewebFingerprints || [];
   window.PokewebFingerprints.push(...entries);
 })();

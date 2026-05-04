@@ -73,6 +73,62 @@ const headerFingerprints = [
     icon: "shopify",
     headers: [{ name: "x-shopify-stage", value: /.+/ }],
   },
+  // Backend frameworks (détection header)
+  {
+    name: "Express",
+    category: "backend-framework",
+    icon: "express",
+    headers: [{ name: "x-powered-by", value: /Express/i }],
+  },
+  {
+    name: "ASP.NET",
+    category: "backend-framework",
+    icon: "aspnet",
+    headers: [
+      { name: "x-aspnet-version", value: /.+/ },
+      { name: "x-powered-by", value: /ASP\.NET/i },
+    ],
+  },
+  // Serveurs web
+  {
+    name: "Nginx",
+    category: "web-server",
+    icon: "nginx",
+    headers: [{ name: "server", value: /nginx/i }],
+  },
+  {
+    name: "Apache",
+    category: "web-server",
+    icon: "apache",
+    headers: [{ name: "server", value: /apache/i }],
+  },
+  {
+    name: "Caddy",
+    category: "web-server",
+    icon: "caddy",
+    headers: [{ name: "server", value: /caddy/i }],
+  },
+  {
+    name: "LiteSpeed",
+    category: "web-server",
+    icon: "litespeed",
+    headers: [{ name: "server", value: /litespeed/i }],
+  },
+  {
+    name: "Microsoft IIS",
+    category: "web-server",
+    icon: "iis",
+    headers: [{ name: "server", value: /Microsoft-IIS/i }],
+  },
+  {
+    name: "Varnish",
+    category: "web-server",
+    icon: "varnish",
+    headers: [
+      { name: "x-varnish", value: /.+/ },
+      { name: "via", value: /varnish/i },
+    ],
+  },
 ];
 
 function matchesHeader(headers, { name, value }) {

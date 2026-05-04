@@ -1,8 +1,11 @@
 const CATEGORY_LABELS = {
   "frontend-framework": "Frontend",
   "meta-framework":     "Meta-framework",
-  "css-framework":      "CSS",
+  "backend-framework":  "Backend",
   "cms":                "CMS",
+  "css-framework":      "CSS",
+  "js-library":         "Bibliothèques JS",
+  "web-server":         "Serveur web",
   "hosting":            "Hosting / CDN",
   "analytics":          "Analytics",
 };
@@ -163,6 +166,12 @@ async function init() {
   document.getElementById("rescan-btn").addEventListener("click", () => {
     chrome.tabs.reload(tab.id);
     window.close();
+  });
+
+  document.getElementById("reset-collection-btn").addEventListener("click", async () => {
+    if (!confirm("Vider ton Pokéweb personnel ? Cette action est irréversible.")) return;
+    await self.PokewebStore.clearCollection();
+    await renderCollection();
   });
 }
 

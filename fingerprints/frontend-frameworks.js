@@ -83,6 +83,89 @@
     },
   ];
 
+    {
+      name: "Alpine.js",
+      category: "frontend-framework",
+      icon: "alpinejs",
+      detect: {
+        domSelectors: ["[x-data]", "[x-init]", "[x-show]"],
+        scriptSrc: [/alpinejs/i, /alpine\.min\.js/i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Lit",
+      category: "frontend-framework",
+      icon: "lit",
+      detect: {
+        globals: ["litElementVersions"],
+        htmlPatterns: [/<!--lit-part/],
+        scriptSrc: [/lit-element/i, /lit-html/i, /@lit\//i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Ember.js",
+      category: "frontend-framework",
+      icon: "ember",
+      detect: {
+        globals: ["Ember"],
+        htmlPatterns: [/ember-application/, /ember-view/],
+        scriptSrc: [/ember\.(prod|debug)/i],
+      },
+      versionDetect: (w) => w.Ember?.VERSION ?? null,
+    },
+    {
+      name: "Qwik",
+      category: "frontend-framework",
+      icon: "qwik",
+      detect: {
+        htmlPatterns: [/q:container/, /q:base/, /q:render/],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Backbone.js",
+      category: "frontend-framework",
+      icon: "backbone",
+      detect: {
+        globals: ["Backbone"],
+        scriptSrc: [/backbone(\.min)?\.js/i],
+      },
+      versionDetect: (w) => w.Backbone?.VERSION ?? null,
+    },
+    {
+      name: "Mithril",
+      category: "frontend-framework",
+      icon: "mithril",
+      detect: {
+        // "m" comme global est trop générique — on s'appuie uniquement sur scriptSrc
+        scriptSrc: [/mithril/i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Aurelia",
+      category: "frontend-framework",
+      icon: "aurelia",
+      detect: {
+        htmlPatterns: [/aurelia-app/],
+        scriptSrc: [/aurelia/i],
+      },
+      versionDetect: null,
+    },
+    {
+      name: "Riot.js",
+      category: "frontend-framework",
+      icon: "riot",
+      detect: {
+        globals: ["riot"],
+        scriptSrc: [/riot(\.min)?\.js/i],
+      },
+      versionDetect: (w) => w.riot?.version ?? null,
+    },
+  ];
+
   window.PokewebFingerprints = window.PokewebFingerprints || [];
   window.PokewebFingerprints.push(...entries);
 })();

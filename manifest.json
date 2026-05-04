@@ -19,6 +19,9 @@
         "fingerprints/cms.js",
         "fingerprints/hosting.js",
         "fingerprints/analytics.js",
+        "fingerprints/backend-frameworks.js",
+        "fingerprints/js-libraries.js",
+        "fingerprints/web-servers.js",
         "detector.js",
         "content.js"
       ]

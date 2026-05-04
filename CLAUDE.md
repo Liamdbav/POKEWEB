@@ -23,12 +23,15 @@ Extension Chrome destinée aux vibecoders qui veulent identifier rapidement la s
 - Un fingerprint = un objet dans `fingerprints/` (un fichier par catégorie)
 
 ## Catégories de détection (ordre d'affichage dans la popup)
-1. Frontend frameworks (React, Vue, Svelte, Angular, Solid)
-2. Meta-frameworks (Next.js, Nuxt, Remix, Astro, SvelteKit)
-3. CSS frameworks (Tailwind, Bootstrap, Bulma)
-4. CMS (WordPress, Shopify, Webflow, Ghost)
-5. Hosting / CDN (Vercel, Netlify, Cloudflare, AWS)
-6. Analytics (GA, Plausible, Fathom, PostHog)
+1. Frontend frameworks (React, Vue, Svelte, Angular, Solid, Alpine.js, Lit, Ember, Qwik…)
+2. Meta-frameworks (Next.js, Nuxt, Remix, Astro, SvelteKit, Gatsby)
+3. Backend frameworks (Express, Laravel, Django, Rails, ASP.NET)
+4. CMS (WordPress, Shopify, Webflow, Ghost, Drupal, Joomla, Magento, WooCommerce…)
+5. CSS frameworks (Tailwind, Bootstrap, Bulma, Ant Design, Styled Components, Emotion…)
+6. Bibliothèques JS (jQuery, Three.js, D3.js, Chart.js, GSAP, Moment.js, Day.js)
+7. Serveurs web (Nginx, Apache, Caddy, LiteSpeed, IIS, Varnish)
+8. Hosting / CDN (Vercel, Netlify, Cloudflare, AWS CloudFront, GitHub Pages, Fastly)
+9. Analytics (GA, Plausible, Fathom, PostHog, Mixpanel, Hotjar, Segment, Sentry, Firebase)
 
 ## Hors-scope V1
 - Pas d'export en PDF/JSON (V2)
