@@ -60,8 +60,6 @@
       },
       versionDetect: null,
     },
-  ];
-
     {
       name: "Segment",
       category: "analytics",

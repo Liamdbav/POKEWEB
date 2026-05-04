@@ -81,8 +81,6 @@
       },
       versionDetect: (w) => w.preact?.version ?? null,
     },
-  ];
-
     {
       name: "Alpine.js",
       category: "frontend-framework",

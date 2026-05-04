@@ -54,8 +54,6 @@
       },
       versionDetect: null,
     },
-  ];
-
     {
       name: "Foundation",
       category: "css-framework",

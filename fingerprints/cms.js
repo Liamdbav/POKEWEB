@@ -76,8 +76,6 @@
       },
       versionDetect: null,
     },
-  ];
-
     {
       name: "Drupal",
       category: "cms",
