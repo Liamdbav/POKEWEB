@@ -15,6 +15,15 @@
     });
   }
 
+  // meta-framework détecté → framework frontend sous-jacent implicite
+  const IMPLICIT_FRAMEWORKS = {
+    "Next.js": "React",
+    "Remix":   "React",
+    "Gatsby":  "React",
+    "Nuxt":    "Vue",
+    "SvelteKit": "Svelte",
+  };
+
   function runDetection(context, fingerprints) {
     const results = [];
 
@@ -51,6 +60,25 @@
       }
 
       results.push({ name: fp.name, category: fp.category, icon: fp.icon, version });
+    }
+
+    // Post-traitement : ajoute les frameworks implicites déduits des meta-frameworks
+    const detectedNames = new Set(results.map(r => r.name));
+    for (const r of [...results]) {
+      const impliedName = IMPLICIT_FRAMEWORKS[r.name];
+      if (!impliedName || detectedNames.has(impliedName)) continue;
+
+      const impliedFp = fingerprints.find(fp => fp.name === impliedName);
+      if (impliedFp) {
+        results.push({
+          name: impliedFp.name,
+          category: impliedFp.category,
+          icon: impliedFp.icon,
+          version: null,
+          implicit: true,
+        });
+        detectedNames.add(impliedName);
+      }
     }
 
     return results;
