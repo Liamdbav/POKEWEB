@@ -1,15 +1,4 @@
-import { frontendFrameworks } from "./frontend-frameworks.js";
-import { metaFrameworks } from "./meta-frameworks.js";
-import { cssFrameworks } from "./css-frameworks.js";
-import { cms } from "./cms.js";
-import { hosting } from "./hosting.js";
-import { analytics } from "./analytics.js";
-
-export const allFingerprints = [
-  ...frontendFrameworks,
-  ...metaFrameworks,
-  ...cssFrameworks,
-  ...cms,
-  ...hosting,
-  ...analytics,
-];
+// Agrégateur prévu pour une V2 avec bundler (Rollup / esbuild).
+// En V1, les fichiers individuels utilisent le pattern IIFE + window.PokewebFingerprints
+// et n'ont plus d'exports ES6 — les imports ci-dessous ne fonctionneraient pas.
+// Ce fichier n'est pas chargé dans le manifest.

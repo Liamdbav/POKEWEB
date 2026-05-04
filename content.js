@@ -1,5 +1,16 @@
-console.log("Pokéweb content script injecté sur " + window.location.hostname);
+// Chargé après les fingerprints et detector.js — window.PokewebFingerprints et
+// window.PokewebDetector sont garantis présents à ce stade.
+const { runDetection, buildContextFromDOM } = window.PokewebDetector;
 
-chrome.runtime.sendMessage({ type: "ping" }, (response) => {
-  console.log("Pokéweb réponse du background :", response);
-});
+const context = buildContextFromDOM(window.PokewebFingerprints);
+const results = runDetection(context, window.PokewebFingerprints);
+
+console.log(
+  `Pokéweb — ${results.length} techno(s) détectée(s) sur ${window.location.hostname} :`,
+  results
+);
+
+chrome.runtime.sendMessage(
+  { type: "detection-result", url: location.href, results },
+  () => { if (chrome.runtime.lastError) {} }
+);

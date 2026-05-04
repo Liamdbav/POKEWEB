@@ -12,8 +12,17 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
+      "run_at": "document_idle",
+      "js": [
+        "fingerprints/frontend-frameworks.js",
+        "fingerprints/meta-frameworks.js",
+        "fingerprints/css-frameworks.js",
+        "fingerprints/cms.js",
+        "fingerprints/hosting.js",
+        "fingerprints/analytics.js",
+        "detector.js",
+        "content.js"
+      ]
     }
   ],
   "action": {
