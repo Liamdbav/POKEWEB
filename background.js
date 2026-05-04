@@ -182,14 +182,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     console.log(`Pokéweb [tab ${tabId}] — ${merged.length} techno(s) :`, merged);
 
-    // Enregistrement dans le Pokédex persistant (non bloquant)
-    try {
-      const hostname = new URL(message.url).hostname;
-      self.PokewebStore.recordDetection(hostname, merged);
-    } catch (_) {}
+    // Filtre les technos désactivées avant enregistrement et affichage
+    chrome.storage.local.get("disabled", (data) => {
+      const disabled = new Set(data.disabled ?? []);
+      const filtered = merged.filter(r => !disabled.has(r.name));
 
-    chrome.storage.session.set({ [`result-${tabId}`]: { url: message.url, results: merged } });
-    sendResponse({ ok: true });
+      try {
+        const hostname = new URL(message.url).hostname;
+        self.PokewebStore.recordDetection(hostname, filtered);
+      } catch (_) {}
+
+      chrome.storage.session.set({ [`result-${tabId}`]: { url: message.url, results: filtered } });
+      sendResponse({ ok: true });
+    });
     return true;
   }
 

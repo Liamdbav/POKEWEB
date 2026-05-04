@@ -12,6 +12,9 @@ const CATEGORY_LABELS = {
 
 const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS);
 
+// Noms des fingerprints désactivés — chargé une fois dans init(), partagé par toutes les vues
+let disabledSet = new Set();
+
 function escHtml(str) {
   return str
     .replace(/&/g, "&amp;")
@@ -24,6 +27,22 @@ function safeHostname(url) {
   try { return new URL(url).hostname; }
   catch { return "—"; }
 }
+
+// ── Disabled store ───────────────────────────────────────────────
+
+function loadDisabled() {
+  return new Promise(resolve => {
+    chrome.storage.local.get("disabled", data => {
+      resolve(new Set(data.disabled ?? []));
+    });
+  });
+}
+
+function saveDisabled() {
+  chrome.storage.local.set({ disabled: [...disabledSet] });
+}
+
+// ── Vue "Site actuel" ────────────────────────────────────────────
 
 function renderBadge(tech) {
   const icon = window.PokewebIconsMap?.[tech.icon] ?? "📦";
@@ -41,7 +60,10 @@ function renderBadge(tech) {
 function renderResults(results) {
   const resultsEl = document.getElementById("results");
 
-  if (!results || results.length === 0) {
+  // Filtre les technos désactivées avant affichage
+  const visible = results?.filter(r => !disabledSet.has(r.name)) ?? null;
+
+  if (!visible || visible.length === 0) {
     resultsEl.className = "empty";
     resultsEl.innerHTML = "Aucune analyse disponible.<br>Rechargez la page.";
     document.getElementById("tech-count").textContent = "0 techno détectée";
@@ -49,7 +71,7 @@ function renderResults(results) {
   }
 
   const byCategory = {};
-  for (const tech of results) {
+  for (const tech of visible) {
     (byCategory[tech.category] ??= []).push(tech);
   }
 
@@ -65,10 +87,12 @@ function renderResults(results) {
     })
     .join("");
 
-  const count = results.length;
+  const count = visible.length;
   document.getElementById("tech-count").textContent =
     `${count} techno${count > 1 ? "s" : ""} détectée${count > 1 ? "s" : ""}`;
 }
+
+// ── Vue "Collection" ─────────────────────────────────────────────
 
 function renderStats(stats) {
   const { totalTechnos, totalSites, mostSeen } = stats;
@@ -127,6 +151,74 @@ async function renderCollection() {
     .join("");
 }
 
+// ── Vue "Filtres" ────────────────────────────────────────────────
+
+function updateFiltersCount() {
+  const total = (window.PokewebFingerprintsMeta || []).length;
+  const active = total - disabledSet.size;
+  const el = document.getElementById("filters-count");
+  if (el) el.textContent = `${active} / ${total} actives`;
+}
+
+function renderFilters() {
+  const listEl = document.getElementById("filters-list");
+  if (!listEl) return;
+
+  const meta = window.PokewebFingerprintsMeta || [];
+  const byCategory = {};
+  for (const fp of meta) {
+    (byCategory[fp.category] ??= []).push(fp);
+  }
+
+  listEl.innerHTML = CATEGORY_ORDER
+    .filter(cat => byCategory[cat]?.length)
+    .map(cat => {
+      const items = byCategory[cat].map(fp => {
+        const icon = window.PokewebIconsMap?.[fp.icon] ?? "📦";
+        const checked = disabledSet.has(fp.name) ? "" : " checked";
+        return `<label class="filter-item">`
+          + `<input type="checkbox" value="${escHtml(fp.name)}"${checked}>`
+          + `<span class="filter-item-icon">${icon}</span>`
+          + `<span class="filter-item-name">${escHtml(fp.name)}</span>`
+          + `</label>`;
+      }).join("");
+
+      return `<div class="filter-category">`
+        + `<div class="filter-cat-header">`
+        + `<span>${escHtml(CATEGORY_LABELS[cat])}</span>`
+        + `<div class="filter-cat-actions">`
+        + `<button class="btn-link" data-action="all" data-cat="${cat}" type="button">Tout</button>`
+        + `<button class="btn-link" data-action="none" data-cat="${cat}" type="button">Aucun</button>`
+        + `</div></div>`
+        + `<div class="filter-items">${items}</div>`
+        + `</div>`;
+    })
+    .join("");
+
+  listEl.querySelectorAll(".filter-item input").forEach(cb => {
+    cb.addEventListener("change", () => {
+      if (cb.checked) disabledSet.delete(cb.value);
+      else disabledSet.add(cb.value);
+      saveDisabled();
+      updateFiltersCount();
+    });
+  });
+
+  listEl.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const fps = byCategory[btn.dataset.cat] ?? [];
+      if (btn.dataset.action === "all") fps.forEach(fp => disabledSet.delete(fp.name));
+      else fps.forEach(fp => disabledSet.add(fp.name));
+      saveDisabled();
+      renderFilters();
+    });
+  });
+
+  updateFiltersCount();
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────
+
 function initTabs() {
   document.querySelectorAll(".tab").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -136,13 +228,17 @@ function initTabs() {
       document.querySelectorAll(".view").forEach(v =>
         v.classList.toggle("hidden", v.id !== `view-${btn.dataset.tab}`)
       );
-      // Chargement paresseux : la collection n'est rendue qu'à l'ouverture de son onglet
       if (btn.dataset.tab === "collection") renderCollection();
+      if (btn.dataset.tab === "filters") renderFilters();
     });
   });
 }
 
+// ── Init ─────────────────────────────────────────────────────────
+
 async function init() {
+  disabledSet = await loadDisabled();
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   document.getElementById("site-url").textContent = tab?.url
@@ -172,6 +268,12 @@ async function init() {
     if (!confirm("Vider ton Pokéweb personnel ? Cette action est irréversible.")) return;
     await self.PokewebStore.clearCollection();
     await renderCollection();
+  });
+
+  document.getElementById("filters-enable-all-btn").addEventListener("click", () => {
+    disabledSet.clear();
+    saveDisabled();
+    renderFilters();
   });
 }
 

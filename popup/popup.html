@@ -13,14 +13,15 @@
       </div>
       <nav class="tabs">
         <button class="tab active" data-tab="current">Site actuel</button>
-        <button class="tab" data-tab="collection">Pokéweb personnel</button>
+        <button class="tab" data-tab="collection">Collection</button>
+        <button class="tab" data-tab="filters">Filtres</button>
       </nav>
     </header>
 
     <div id="site-url"></div>
 
     <main>
-      <section id="view-current" class="view active">
+      <section id="view-current" class="view">
         <div id="results"></div>
       </section>
       <section id="view-collection" class="view hidden">
@@ -29,6 +30,13 @@
         <div class="collection-actions">
           <button id="reset-collection-btn" class="btn-danger" type="button">Réinitialiser le Pokéweb personnel</button>
         </div>
+      </section>
+      <section id="view-filters" class="view hidden">
+        <div class="filters-toolbar">
+          <span id="filters-count"></span>
+          <button id="filters-enable-all-btn" class="btn-link" type="button">Tout réactiver</button>
+        </div>
+        <div id="filters-list"></div>
       </section>
     </main>
 
@@ -39,6 +47,7 @@
 
     <script src="../collection-store.js"></script>
     <script src="icons-map.js"></script>
+    <script src="fingerprints-meta.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
