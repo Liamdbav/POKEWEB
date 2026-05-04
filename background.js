@@ -1,3 +1,6 @@
+// importScripts requiert un service worker classique (pas "type: module")
+importScripts('collection-store.js');
+
 console.log("Pokéweb service worker actif");
 
 // Fingerprints avec détection par headers HTTP uniquement.
@@ -123,18 +126,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     console.log(`Pokéweb [tab ${tabId}] — ${merged.length} techno(s) :`, merged);
 
+    // Enregistrement dans le Pokédex persistant (non bloquant)
+    try {
+      const hostname = new URL(message.url).hostname;
+      self.PokewebStore.recordDetection(hostname, merged);
+    } catch (_) {}
+
     chrome.storage.session.set({ [`result-${tabId}`]: { url: message.url, results: merged } });
     sendResponse({ ok: true });
     return true;
   }
 
   if (message.type === "get-results") {
-    chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-      if (!tab) { sendResponse(null); return; }
-      chrome.storage.session.get(`result-${tab.id}`, (data) => {
-        sendResponse(data[`result-${tab.id}`] ?? null);
+    const tabId = message.tabId;
+    if (tabId) {
+      chrome.storage.session.get(`result-${tabId}`, (data) => {
+        sendResponse(data[`result-${tabId}`] ?? null);
       });
-    });
+    } else {
+      // Fallback : interroge le tab actif si tabId non fourni
+      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+        if (!tab) { sendResponse(null); return; }
+        chrome.storage.session.get(`result-${tab.id}`, (data) => {
+          sendResponse(data[`result-${tab.id}`] ?? null);
+        });
+      });
+    }
     return true;
   }
 });

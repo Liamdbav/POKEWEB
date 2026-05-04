@@ -36,6 +36,33 @@ Extension Chrome destinée aux vibecoders qui veulent identifier rapidement la s
 - Pas de mode dark/light switchable (dark par défaut, point)
 - Pas de support Firefox (Chrome only)
 
+## Storage
+
+### `chrome.storage.local` — clé `"collection"`
+Collection persistante de toutes les technos détectées. Un objet indexé par nom de techno :
+```javascript
+{
+  "Next.js": {
+    name: "Next.js",           // identifiant stable
+    category: "meta-framework",
+    icon: "nextjs",            // clé dans PokewebIconsMap
+    firstSeen: 1730000000000,  // timestamp premier scan
+    lastSeen:  1730500000000,  // timestamp dernier scan
+    count: 12,                 // nombre total de détections
+    sites: ["nextjs.org", "vercel.com"]  // hostnames uniques, max 50, FIFO
+  }
+}
+```
+Règles de mise à jour (dans `collection-store.js`) :
+- Nouvelle techno : créer avec count=1, firstSeen=lastSeen=now
+- Même techno, nouveau site : count++, lastSeen=now, push hostname (shift si >50)
+- Même techno, même site qu'une détection précédente : count++, lastSeen=now, sites inchangé
+- Les technos `implicit: true` sont enregistrées sans distinction
+
+### `chrome.storage.session` — clé `"result-${tabId}"`
+Résultats temporaires de la dernière analyse par onglet. Effacés à la fermeture du tab.
+Format : `{ url: string, results: [{ name, category, icon, version, implicit? }] }`
+
 ## Commandes utiles
 - Charger l'extension : chrome://extensions/ → mode développeur ON → "Charger l'extension non empaquetée" → sélectionner le dossier du projet
 - Recharger après modification : icône reload dans chrome://extensions/

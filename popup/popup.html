@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pokéweb</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <h1>Pokéweb</h1>
+        <p class="tagline">Stack detection</p>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="current">Site actuel</button>
+        <button class="tab" data-tab="collection">Pokéweb personnel</button>
+      </nav>
+    </header>
+
+    <div id="site-url"></div>
+
+    <main>
+      <section id="view-current" class="view active">
+        <div id="results"></div>
+      </section>
+      <section id="view-collection" class="view hidden">
+        <div id="collection-stats"></div>
+        <div id="collection-list"></div>
+      </section>
+    </main>
+
+    <footer>
+      <button id="rescan-btn">Recharger l'analyse</button>
+      <span id="tech-count"></span>
+    </footer>
+
+    <script src="../collection-store.js"></script>
+    <script src="icons-map.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

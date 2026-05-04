@@ -1,0 +1,253 @@
+:root {
+  --bg:             #0d0d0f;
+  --bg-card:        #1a1a1f;
+  --bg-card-hover:  #22222a;
+  --border:         #2a2a32;
+  --text:           #f0f0f0;
+  --text-muted:     #888;
+  --accent:         #e63946;
+  --accent-soft:    rgba(230, 57, 70, 0.15);
+  --implicit:       #ffd60a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 360px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ── Header ─────────────────────────────────── */
+header {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+}
+
+.tagline {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Tabs ────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  flex: 1;
+  padding: 6px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.tab.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.tab:hover:not(.active) {
+  color: var(--text);
+}
+
+/* ── URL ─────────────────────────────────────── */
+#site-url {
+  padding: 7px 16px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Main ────────────────────────────────────── */
+main {
+  padding: 12px 16px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+/* ── Vues ────────────────────────────────────── */
+.view.hidden {
+  display: none;
+}
+
+/* ── Category ────────────────────────────────── */
+.category {
+  margin-bottom: 16px;
+}
+
+.category:last-child {
+  margin-bottom: 0;
+}
+
+.category h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Badge ───────────────────────────────────── */
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.tech-badge:hover {
+  background: var(--bg-card-hover);
+}
+
+/* ↳ préfixe pour les technos déduites */
+.tech-badge.implicit {
+  border-color: var(--implicit);
+  opacity: 0.85;
+}
+
+.tech-badge.implicit::before {
+  content: "↳";
+  font-size: 11px;
+  color: var(--implicit);
+  margin-right: 1px;
+}
+
+/* ── Version ─────────────────────────────────── */
+.tech-version {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Compteur collection ─────────────────────── */
+.tech-count {
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* ── Empty states ────────────────────────────── */
+#results.empty {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.empty-collection {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* ── Stats collection ────────────────────────── */
+#collection-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.stat {
+  text-align: center;
+  overflow: hidden;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Footer ──────────────────────────────────── */
+footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+#rescan-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+#rescan-btn:hover {
+  border-color: var(--accent);
+}
